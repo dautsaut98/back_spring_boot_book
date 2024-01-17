@@ -26,8 +26,9 @@ public class ServiceUtilisateur implements IServiceUtilisateur{
 	@Override
 	public Utilisateur addUtilisateur(Utilisateur utilisateur) throws UtilisateurExisteDejaException {
 		if(this.findUtilisateurByLogin(utilisateur.getLogin()).isPresent()) {
-			logger.error("l'utilisateur avec le login "+utilisateur.getLogin()+" existe dejà");
-			throw new UtilisateurExisteDejaException();
+			String messageErreur = "l'utilisateur avec le login "+utilisateur.getLogin()+" existe dejà";
+			logger.error(messageErreur);
+			throw new UtilisateurExisteDejaException(messageErreur);
 		}
 		Utilisateur utilisateurSave = this.utilisateurRepository.save(utilisateur);
 		logger.info("l'utilisateur avec le login "+utilisateurSave.getLogin()+" est enregistre");
@@ -39,7 +40,7 @@ public class ServiceUtilisateur implements IServiceUtilisateur{
 		Optional<Utilisateur> opUtilisateur = this.utilisateurRepository.findUtilisateurByLoginAndPassword(login, password);
 		logger.info("si l utilisateur avec le login "+login+" et le password "+password+" est trouvé : "+opUtilisateur.isPresent());
 		opUtilisateur.ifPresent(utilisateurFind -> logger.info("l utilisateur avec le login "+login+" trouvé est : "+utilisateurFind.toString()));
-		return opUtilisateur.orElseThrow(() -> new UtilisateurNonTrouveException());
+		return opUtilisateur.orElseThrow(() -> new UtilisateurNonTrouveException("l utilisateur avec le login "+login+" est introuvable"));
 	}
 
 	@Override
@@ -52,6 +53,6 @@ public class ServiceUtilisateur implements IServiceUtilisateur{
 
 	@Override
 	public Utilisateur findUtilisateurById(Integer idUser) throws UtilisateurNonTrouveException {
-		return this.utilisateurRepository.findById(idUser).orElseThrow(() -> new UtilisateurNonTrouveException());
+		return this.utilisateurRepository.findById(idUser).orElseThrow(() -> new UtilisateurNonTrouveException("l utilisateur avec l id user "+idUser+" est introuvable"));
 	}
 }

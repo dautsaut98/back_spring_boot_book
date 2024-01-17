@@ -28,8 +28,9 @@ public class ServiceBook implements IServiceBook {
 	@Override
 	public void addBook(Book book) throws BookExisteDejaException {
 		if (this.findBookByNomAndIdUtilisateur(book.getNom(), book.getUtilisateur().getId()).isPresent()) {
-			logger.error("le livre avec le nom "+book.getNom()+" existe deja");
-			throw new BookExisteDejaException();
+			String messageErreur = "le livre avec le nom "+book.getNom()+" existe deja";
+			logger.error(messageErreur);
+			throw new BookExisteDejaException(messageErreur);
 		}
 		this.bookRepository.save(book);
 		logger.info("le livre avec le nom "+book.getNom()+" est enregistré");
