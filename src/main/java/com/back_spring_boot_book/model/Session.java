@@ -1,16 +1,13 @@
 package com.back_spring_boot_book.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
 
 @Entity
 @Data
@@ -22,10 +19,13 @@ public class Session {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	private String date;
+	@Column(name = "date", nullable = false)
+	private Timestamp date;
 
+	@Column(name = "duree", nullable = false)
 	private String duree;
 
+	@Column(name = "nombreDePageLu", nullable = false)
 	private Integer nombreDePageLu;
 
 	@ManyToOne

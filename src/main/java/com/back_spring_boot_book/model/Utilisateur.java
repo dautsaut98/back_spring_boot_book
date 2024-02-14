@@ -2,13 +2,7 @@ package com.back_spring_boot_book.model;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,14 +19,19 @@ public class Utilisateur {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
+	@Column(name = "login", nullable = false, length = 30)
 	private String login;
 
+	@Column(name = "password", nullable = false, length = 30)
 	private String password;
 
+	@Column(name = "prenom", nullable = false, length = 30)
 	private String prenom;
 
+	@Column(name = "nom", nullable = false, length = 30)
 	private String nom;
 
+	@Column(name = "email", nullable = false, length = 30)
 	private String email;
 
 	@OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -40,7 +39,7 @@ public class Utilisateur {
 
 	@Override
 	public String toString() {
-		return "Utilisateur [id=" + id + ", login=" + login + ", password=" + password + ", prenom=" + prenom + ", nom="
+		return "Utilisateur [id=" + id + ", login=" + login + ", prenom=" + prenom + ", nom="
 				+ nom + ", email=" + email + "]";
 	}
 }

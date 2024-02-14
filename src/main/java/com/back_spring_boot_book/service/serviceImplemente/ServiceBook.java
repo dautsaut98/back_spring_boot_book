@@ -1,4 +1,4 @@
-package com.back_spring_boot_book.service;
+package com.back_spring_boot_book.service.serviceImplemente;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +12,7 @@ import com.back_spring_boot_book.exceptions.BookExisteDejaException;
 import com.back_spring_boot_book.model.Book;
 import com.back_spring_boot_book.model.Utilisateur;
 import com.back_spring_boot_book.repository.RepositoryBook;
+import com.back_spring_boot_book.service.serviceInterface.IServiceBook;
 
 @Service
 public class ServiceBook implements IServiceBook {
@@ -27,27 +28,29 @@ public class ServiceBook implements IServiceBook {
 
 	@Override
 	public void addBook(Book book) throws BookExisteDejaException {
-		if (this.findBookByNomAndIdUtilisateur(book.getNom(), book.getUtilisateur().getId()).isPresent()) {
-			String messageErreur = "le livre avec le nom "+book.getNom()+" existe deja";
-			logger.error(messageErreur);
-			throw new BookExisteDejaException(messageErreur);
-		}
+		logger.debug("Entree dans la méthode addBook avec le livre : " + book.toString());
+		this.findBookByNomAndIdUtilisateur(book.getNom(), book.getUtilisateur().getId())
+				.ifPresent(user -> {throw new BookExisteDejaException("le livre avec le nom "+book.getNom()+" existe deja");});
 		this.bookRepository.save(book);
-		logger.info("le livre avec le nom "+book.getNom()+" est enregistré");
+		logger.debug("Sortie OK de la méthode addBook avec le livre : "+ book);
 	}
 
 	@Override
 	public List<Book> findByIdUtilisateur(Integer idUtilisateur) {
+		logger.debug("Entree dans la méthode findByIdUtilisateur avec l id utilisateur : " + idUtilisateur);
 		List<Book> livres = this.bookRepository.findAllByUtilisateurId(idUtilisateur).orElseGet(Collections::emptyList);
-		logger.info("liste des livres trouvés pour l utilisateur "+idUtilisateur+" est : "+livres.toString());
+		logger.debug("Sortie OK de la méthode findByIdUtilisateur avec l id utilisateur : "+idUtilisateur+" et les livres : "+ livres);
 		return livres;
 	}
 
 	@Override
 	public Optional<Book> findBookByNomAndIdUtilisateur(String nom, Integer idUtilisateur) {
+		logger.debug("Entree dans la méthode findBookByNomAndIdUtilisateur avec l id utilisateur : "+idUtilisateur);
 		Optional<Book> opLivre = this.bookRepository.findByNomAndUtilisateurId(nom, idUtilisateur);
-		logger.info("si le livre avec le nom "+nom+" trouvé pour l utilisateur "+idUtilisateur+" est trouvé : "+opLivre.isPresent());
-		opLivre.ifPresent(livreFind -> logger.info("livre avec le nom "+nom+" trouvé pour l utilisateur "+idUtilisateur+" est : "+livreFind.toString()));
+		if(opLivre.isEmpty())
+			logger.debug("Sortie OK de la méthode findBookByNomAndIdUtilisateur avec le livre avec comme nom : " + nom + " et id utilisateur : "+idUtilisateur+" absent");
+		else
+			logger.debug("Sortie OK de la méthode findBookByNomAndIdUtilisateur pour l id utilisateur "+idUtilisateur+" et livre : "+opLivre.get());
 		return opLivre;
 	}
 }

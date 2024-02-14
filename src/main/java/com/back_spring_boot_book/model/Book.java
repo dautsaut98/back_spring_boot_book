@@ -1,16 +1,9 @@
 package com.back_spring_boot_book.model;
 
+import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,16 +27,22 @@ public class Book {
 	@OneToMany(mappedBy = "livre", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Session> sessions;
 
+	@Column(name = "nom", nullable = false, length = 30)
 	private String nom;
 
+	@Column(name = "prenomAuteur", nullable = false, length = 30)
 	private String prenomAuteur;
 
+	@Column(name = "nomAuteur", nullable = false, length = 30)
 	private String nomAuteur;
 
+	@Column(name = "description", nullable = false, length = 30)
 	private String description;
 
-	private String dateParution;
+	@Column(name = "dateParution", nullable = false, length = 10)
+	private Timestamp dateParution;
 
+	@Column(name = "lu", nullable = false)
 	private boolean lu;
 
 	@Override

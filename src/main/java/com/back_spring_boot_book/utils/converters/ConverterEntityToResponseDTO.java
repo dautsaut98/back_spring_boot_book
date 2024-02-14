@@ -1,23 +1,23 @@
-package com.back_spring_boot_book.converter;
+package com.back_spring_boot_book.utils.converters;
 
 import java.util.Objects;
 import java.util.Optional;
 
+import com.back_spring_boot_book.dtos.responseDto.BookResponseDTO;
+import com.back_spring_boot_book.dtos.responseDto.SessionResponseDTO;
+import com.back_spring_boot_book.dtos.responseDto.UtilisateurResponseDTO;
 import com.back_spring_boot_book.model.Book;
-import com.back_spring_boot_book.model.BookDTO;
 import com.back_spring_boot_book.model.Session;
-import com.back_spring_boot_book.model.SessionDTO;
 import com.back_spring_boot_book.model.Utilisateur;
-import com.back_spring_boot_book.model.UtilisateurDTO;
 
-public class ConverterEntityToDTO {
+public class ConverterEntityToResponseDTO {
 
-	public static BookDTO convertBookToBookDTO(Book book) {
+	public static BookResponseDTO convertBookToBookDTO(Book book) {
 		if(Objects.isNull(book)) {
 			return null;
 		}
 
-		return BookDTO.builder()
+		return BookResponseDTO.builder()
 				.id(book.getId())
 				.idUser(Optional.ofNullable(book.getUtilisateur()).map(Utilisateur::getId).orElse(null))
 				.nom(book.getNom())
@@ -29,12 +29,12 @@ public class ConverterEntityToDTO {
 				.build();
 	}
 
-	public static UtilisateurDTO convertUtilisateurToUtilisateurDTO(Utilisateur utilisateur) {
+	public static UtilisateurResponseDTO convertUtilisateurToUtilisateurDTO(Utilisateur utilisateur) {
 		if(Objects.isNull(utilisateur)) {
 			return null;
 		}
 
-		return UtilisateurDTO.builder()
+		return UtilisateurResponseDTO.builder()
 				.id(utilisateur.getId())
 				.login(utilisateur.getLogin())
 				.prenom(utilisateur.getPrenom())
@@ -43,12 +43,12 @@ public class ConverterEntityToDTO {
 				.build();
 	}
 
-	public static SessionDTO convertSessionToSessionDTO(Session session) {
+	public static SessionResponseDTO convertSessionToSessionDTO(Session session) {
 		if(Objects.isNull(session)) {
 			return null;
 		}
 
-		return SessionDTO.builder()
+		return SessionResponseDTO.builder()
 				.id(session.getId())
 				.idlivre(Optional.ofNullable(session.getLivre()).map(Book::getId).orElse(null))
 				.date(session.getDate())
