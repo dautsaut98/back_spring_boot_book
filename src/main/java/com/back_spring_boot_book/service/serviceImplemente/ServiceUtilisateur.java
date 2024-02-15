@@ -33,4 +33,14 @@ public class ServiceUtilisateur implements IServiceUtilisateur{
 		logger.debug("Sortie OK de la méthode findUtilisateurById avec l utilisateur : " + utilisateur.toString());
 		return utilisateur;
 	}
+
+	@Override
+	public Utilisateur findUtilisateurByLogin(String login) throws UtilisateurNonTrouveException {
+		logger.debug("Entree dans la méthode findUtilisateurByLogin avec le login : " + login);
+		Utilisateur utilisateur = this.utilisateurRepository
+				.findUtilisateurByLogin(login)
+				.orElseThrow(() -> new UtilisateurNonTrouveException("l utilisateur avec le login " + login + " est introuvable"));
+		logger.debug("Sortie OK de la méthode findUtilisateurByLogin avec l utilisateur : " + utilisateur.toString());
+		return utilisateur;
+	}
 }

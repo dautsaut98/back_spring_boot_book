@@ -2,31 +2,21 @@ package com.back_spring_boot_book.controlleur;
 
 import com.back_spring_boot_book.dtos.requestDto.AuthentificationRequestDTO;
 import com.back_spring_boot_book.dtos.requestDto.InscriptionRequestDTO;
-import com.back_spring_boot_book.dtos.requestDto.UtilisateurRequestDTO;
 import com.back_spring_boot_book.dtos.responseDto.AuthentificationResponseDTO;
 import com.back_spring_boot_book.dtos.responseDto.InscriptionResponseDTO;
-import com.back_spring_boot_book.dtos.responseDto.UtilisateurResponseDTO;
-import com.back_spring_boot_book.exceptions.UtilisateurExisteDejaException;
 import com.back_spring_boot_book.exceptions.UtilisateurNonTrouveException;
 import com.back_spring_boot_book.model.Utilisateur;
 import com.back_spring_boot_book.service.serviceImplemente.UserServiceDetailsImpl;
 import com.back_spring_boot_book.utils.converters.ConvertRequestDTOToEntity;
-import com.back_spring_boot_book.utils.converters.ConverterEntityToResponseDTO;
 import com.back_spring_boot_book.utils.jwt.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayDeque;
 
 @RestController
 public class AuthController {
@@ -66,7 +56,7 @@ public class AuthController {
             userDetails = userDetailsService.saveUser(newUtilisateur);
         } catch (UtilisateurNonTrouveException e) {
             // Si une exception d'authentification est levée (par exemple, mauvais nom d'utilisateur ou mot de passe), renvoyer une réponse d'erreur
-            logger.debug("Sortie 404 de addUtilisateur car l utilisateur "+newUtilisateurRequest.getEmail()+" existe deja en bdd");
+            logger.debug("Sortie 404 de addUtilisateur car l utilisateur "+newUtilisateurRequest.getLogin()+" existe deja en bdd");
             return ResponseEntity.notFound().build();
         }
         // Si l'authentification réussit, génération d'un token JWT avec les informations de l'utilisateur

@@ -31,4 +31,12 @@ public interface IUserServiceDetails {
      * @return l'utilisateur trouvé
      */
     public Optional<Utilisateur> findUtilisateurByLogin(String login);
+
+    /**
+     * Permet de récupérer un utilisateur en bdd si son login est bon et le transform en UserDetails
+     * @param username
+     * @return l'utilisateur si trouvé
+     * @throws UtilisateurNonTrouveException si l'utilisateur non trové en bdd
+     */
+    public UserDetails loadUserByUsername(String username) throws UtilisateurNonTrouveException;
 }

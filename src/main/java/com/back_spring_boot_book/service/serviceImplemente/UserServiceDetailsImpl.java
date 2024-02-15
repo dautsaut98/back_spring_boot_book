@@ -34,7 +34,24 @@ public class UserServiceDetailsImpl implements IUserServiceDetails {
         logger.debug("Sortie OK de la méthode loadUserByUsernameAndPassword avec l utilisateur : "+username);
         // Création d'un objet UserDetails à partir des informations de l'utilisateur trouvé
         return new User(
-                personne.getEmail(), // Nom d'utilisateur
+                personne.getLogin(), // Nom d'utilisateur
+                personne.getPassword(), // Mot de passe
+                new ArrayList<>() // Autorisations (rôles) de l'utilisateur (vide ici)
+        );
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UtilisateurNonTrouveException {
+        logger.debug("Entree dans la méthode loadUserByUsernameAndPassword pour rechercher de l'utilisateur par login et password en bdd, login : "+username);
+        // Recherche de l'utilisateur dans la base de données par son nom d'utilisateur
+        Utilisateur personne = repositoryUtilisateur
+                .findUtilisateurByLogin(username)
+                .orElseThrow(() -> new UtilisateurNonTrouveException("login ou mot de passe incorrect"));
+
+        logger.debug("Sortie OK de la méthode loadUserByUsernameAndPassword avec l utilisateur : "+username);
+        // Création d'un objet UserDetails à partir des informations de l'utilisateur trouvé
+        return new User(
+                personne.getLogin(), // Nom d'utilisateur
                 personne.getPassword(), // Mot de passe
                 new ArrayList<>() // Autorisations (rôles) de l'utilisateur (vide ici)
         );

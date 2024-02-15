@@ -17,4 +17,11 @@ public interface IServiceUtilisateur {
 	 * @return l'utilisateur trouvé
 	 */
 	public Utilisateur findUtilisateurById(Integer idUser) throws UtilisateurNonTrouveException;
+
+	/**
+	 * Trouve un utilisateur par login
+	 * @param login
+	 * @return l'utilisateur trouvé
+	 */
+	public Utilisateur findUtilisateurByLogin(String login) throws UtilisateurNonTrouveException;
 }

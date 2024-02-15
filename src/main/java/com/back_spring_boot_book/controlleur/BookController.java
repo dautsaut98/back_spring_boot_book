@@ -66,7 +66,7 @@ public class BookController {
         logger.debug("retour 200 de getBookOfUser avec pour l utiilisateur "+idUser+" avec la liste de livre : "+booksDTO);
         return ResponseEntity.status(HttpStatus.OK).body(booksDTO);
     }
-    
+
     @GetMapping("/idUser/{idUser}/name/{nameBook}")
     public ResponseEntity<BookResponseDTO> getBookOfUserAndName(@Valid @PathVariable Integer idUser, @PathVariable String nameBook) {
         logger.debug("Appel de getBookOfUserAndName avec l id user "+idUser+" et le livre "+nameBook);
