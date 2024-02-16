@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 @Data
@@ -28,10 +29,12 @@ public class BookResponseDTO {
 
     private boolean lu;
 
+    private String srcImage;
+
     @Override
     public String toString() {
         return "BookResponseDTO [id=" + id + ", nom=" + nom
                 + ", prenomAuteur=" + prenomAuteur + ", nomAuteur=" + nomAuteur + ", description=" + description
-                + ", dateParution=" + dateParution + ", lu=" + lu + "]";
+                + ", dateParution=" + dateParution + ", lu=" + lu + ", srcImage="+srcImage+"]";
     }
 }

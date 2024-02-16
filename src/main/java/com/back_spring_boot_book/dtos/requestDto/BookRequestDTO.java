@@ -38,15 +38,18 @@ public class BookRequestDTO {
     private String description;
 
     @NotNull(message = "la date de description user ne peut etre null")
-    private Timestamp dateParution;
+    private String dateParution;
 
     @NotNull(message = "lu ne peut etre null")
     private boolean lu;
+
+    @NotNull(message = "l'url de l'image du livre ne peut etre null")
+    private String srcImage;
 
     @Override
     public String toString() {
         return "BookRequestDTO [id=" + id + ", nom=" + nom
                 + ", prenomAuteur=" + prenomAuteur + ", nomAuteur=" + nomAuteur + ", description=" + description
-                + ", dateParution=" + dateParution + ", lu=" + lu + "]";
+                + ", dateParution=" + dateParution + ", lu=" + lu + ", srcImage="+srcImage+"]";
     }
 }

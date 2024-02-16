@@ -17,6 +17,8 @@ import com.back_spring_boot_book.service.serviceImplemente.ServiceBook;
 import com.back_spring_boot_book.service.serviceImplemente.ServiceUtilisateur;
 
 import javax.validation.Valid;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +40,7 @@ public class BookController {
         try {
             logger.debug("Appel de addBook avec le livre "+bookRequestDTO.toString());
         	Book book = ConvertRequestDTOToEntity.convertBookDTOToBook(bookRequestDTO);
+            book.setId(null);
         	book.setUtilisateur(this.serviceUtilisateur.findUtilisateurById(bookRequestDTO.getIdUser()));
             this.serviceBook.addBook(book);
             logger.debug("retour 200 de addBook");
@@ -48,11 +51,14 @@ public class BookController {
         } catch(UtilisateurNonTrouveException e) {
             logger.debug("retour 404 de addBook, l utilisateur "+bookRequestDTO.getIdUser()+" est introuvable en bdd");
         	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (ParseException e) {
+            logger.debug("retour 400 de addBook, la date est non correct");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
-    @GetMapping("/idUser/{idUser}/all")
-    public ResponseEntity<List<BookResponseDTO>> getBookOfUser(@Valid @PathVariable Integer idUser) {
+    @GetMapping("/all")
+    public ResponseEntity<List<BookResponseDTO>> getBookOfUser(@Valid @RequestParam Integer idUser) {
         logger.debug("Appel de getBookOfUser avec l id user "+idUser);
         List<BookResponseDTO> booksDTO = this.serviceBook.findByIdUtilisateur(idUser)
         		.stream()
@@ -67,8 +73,8 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK).body(booksDTO);
     }
 
-    @GetMapping("/idUser/{idUser}/name/{nameBook}")
-    public ResponseEntity<BookResponseDTO> getBookOfUserAndName(@Valid @PathVariable Integer idUser, @PathVariable String nameBook) {
+    @GetMapping("/name/{nameBook}")
+    public ResponseEntity<BookResponseDTO> getBookOfUserAndName(@Valid @RequestParam Integer idUser, @PathVariable String nameBook) {
         logger.debug("Appel de getBookOfUserAndName avec l id user "+idUser+" et le livre "+nameBook);
         Optional<Book> opBook = this.serviceBook.findBookByNomAndIdUtilisateur(nameBook, idUser);
         if (opBook.isEmpty()) {

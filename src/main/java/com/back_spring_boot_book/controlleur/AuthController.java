@@ -26,7 +26,7 @@ public class AuthController {
     private UserServiceDetailsImpl userDetailsService;
 
     Logger logger = LoggerFactory.getLogger(AuthController.class);
-    @RequestMapping(value = "/connexion", method = RequestMethod.POST)
+    @PostMapping("/connexion")
     public ResponseEntity<AuthentificationResponseDTO> createAuthenticationToken(@Valid @RequestBody AuthentificationRequestDTO authenticationRequest) {
         logger.debug("Appel de createAuthenticationToken avec l utilisateur "+authenticationRequest.getLogin());
         UserDetails userDetails;

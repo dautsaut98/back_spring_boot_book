@@ -26,6 +26,7 @@ public class ConverterEntityToResponseDTO {
 				.description(book.getDescription())
 				.dateParution(book.getDateParution())
 				.lu(book.isLu())
+				.srcImage(book.getSrcImage())
 				.build();
 	}
 

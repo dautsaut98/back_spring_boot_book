@@ -1,5 +1,8 @@
 package com.back_spring_boot_book.utils.converters;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -13,7 +16,7 @@ import com.back_spring_boot_book.model.Utilisateur;
 
 public class ConvertRequestDTOToEntity {
 
-	public static Book convertBookDTOToBook(BookRequestDTO bookRequestDTO) {
+	public static Book convertBookDTOToBook(BookRequestDTO bookRequestDTO) throws ParseException {
 		if(Objects.isNull(bookRequestDTO)) {
 			return null;
 		}
@@ -25,8 +28,11 @@ public class ConvertRequestDTOToEntity {
 				.prenomAuteur(bookRequestDTO.getPrenomAuteur())
 				.nomAuteur(bookRequestDTO.getNomAuteur())
 				.description(bookRequestDTO.getDescription())
-				.dateParution(bookRequestDTO.getDateParution())
+				.dateParution(new Timestamp(new SimpleDateFormat("yyyy-MM-dd")
+						.parse(bookRequestDTO.getDateParution())
+						.getTime()))
 				.lu(bookRequestDTO.isLu())
+				.srcImage(bookRequestDTO.getSrcImage())
 				.build();
 	}
 	

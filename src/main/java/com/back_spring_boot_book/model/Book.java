@@ -45,10 +45,13 @@ public class Book {
 	@Column(name = "lu", nullable = false)
 	private boolean lu;
 
+	@Column(name = "srcImage", nullable = false)
+	private String srcImage;
+
 	@Override
 	public String toString() {
 		return "Book [id=" + id + ", utilisateur=" + utilisateur + ", sessions=" + sessions + ", nom=" + nom
 				+ ", prenomAuteur=" + prenomAuteur + ", nomAuteur=" + nomAuteur + ", description=" + description
-				+ ", dateParution=" + dateParution + ", lu=" + lu + "]";
+				+ ", dateParution=" + dateParution + ", lu=" + lu + ", srcImage="+srcImage+"]";
 	}
 }
