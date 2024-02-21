@@ -39,4 +39,12 @@ public interface IUserServiceDetails {
      * @throws UtilisateurNonTrouveException si l'utilisateur non trové en bdd
      */
     public UserDetails loadUserByUsername(String username) throws UtilisateurNonTrouveException;
+
+    /**
+     * Trouve un utilisateur par login ou email
+     * @param login
+     * @param email
+     * @return l'utilisateur trouvé
+     */
+    public Optional<Utilisateur> findUtilisateurByLoginOrEmail(String login, String email);
 }

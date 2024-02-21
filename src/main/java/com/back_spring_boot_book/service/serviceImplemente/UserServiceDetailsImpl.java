@@ -60,12 +60,12 @@ public class UserServiceDetailsImpl implements IUserServiceDetails {
     @Override
     public UserDetails saveUser(Utilisateur utilisateur) throws UtilisateurExisteDejaException {
         logger.debug("Entree dans la méthode saveUser avec l'utilisateur : "+utilisateur.toString());
-        this.findUtilisateurByLogin(utilisateur.getLogin())
+        this.findUtilisateurByLoginOrEmail(utilisateur.getLogin(), utilisateur.getEmail())
                 .ifPresent(user -> {throw new UtilisateurExisteDejaException("l'utilisateur avec le login " + utilisateur.getLogin() + " existe déjà");});
         Utilisateur utilisateurSave = this.repositoryUtilisateur.save(utilisateur);
         logger.debug("Sortie OK de la méthode saveUser avec l utilisateur : "+utilisateurSave.toString());
         return new User(
-                utilisateurSave.getEmail(), // Nom d'utilisateur
+                utilisateurSave.getLogin(), // Nom d'utilisateur
                 utilisateurSave.getPassword(), // Mot de passe
                 new ArrayList<>() // Autorisations (rôles) de l'utilisateur (vide ici)
         );
@@ -76,7 +76,18 @@ public class UserServiceDetailsImpl implements IUserServiceDetails {
         logger.debug("Entree dans la méthode findUtilisateurByLogin avec le login : "+login);
         Optional<Utilisateur> opUtilisateur = this.repositoryUtilisateur.findUtilisateurByLogin(login);
         if(opUtilisateur.isEmpty())
-            logger.debug("Sortie OK de la méthode findUtilisateurByLogin avec l utilisateur" + login + "absent");
+            logger.debug("Sortie OK de la méthode findUtilisateurByLogin avec l utilisateur " + login + " absent");
+        else
+            logger.debug("Sortie OK de la méthode findUtilisateurByLogin pour l utilisateur avec le login "+login+" trouvé est : "+ opUtilisateur.get());
+        return opUtilisateur;
+    }
+
+    @Override
+    public Optional<Utilisateur> findUtilisateurByLoginOrEmail(String login, String email) {
+        logger.debug("Entree dans la méthode findUtilisateurByLogin avec le login : "+login);
+        Optional<Utilisateur> opUtilisateur = this.repositoryUtilisateur.findUtilisateurByLoginOrEmail(login, email);
+        if(opUtilisateur.isEmpty())
+            logger.debug("Sortie OK de la méthode findUtilisateurByLogin avec l utilisateur " + login + " absent");
         else
             logger.debug("Sortie OK de la méthode findUtilisateurByLogin pour l utilisateur avec le login "+login+" trouvé est : "+ opUtilisateur.get());
         return opUtilisateur;

@@ -36,7 +36,7 @@ public class BookController {
     Logger logger = LoggerFactory.getLogger(BookController.class);
 
     @PostMapping("/addBook")
-    public ResponseEntity<Void> addBook(@Valid @RequestBody BookRequestDTO bookRequestDTO) {
+    public ResponseEntity<String> addBook(@Valid @RequestBody BookRequestDTO bookRequestDTO) {
         try {
             logger.debug("Appel de addBook avec le livre "+bookRequestDTO.toString());
         	Book book = ConvertRequestDTOToEntity.convertBookDTOToBook(bookRequestDTO);
@@ -47,13 +47,13 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (BookExisteDejaException e) {
             logger.debug("retour 409 de addBook le livre "+bookRequestDTO.getNom()+" existe deja en bdd pour l utlisateur "+bookRequestDTO.getIdUser());
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(bookRequestDTO.getNom());
         } catch(UtilisateurNonTrouveException e) {
             logger.debug("retour 404 de addBook, l utilisateur "+bookRequestDTO.getIdUser()+" est introuvable en bdd");
-        	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(bookRequestDTO.getNom());
         } catch (ParseException e) {
             logger.debug("retour 400 de addBook, la date est non correct");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bookRequestDTO.getNom());
         }
     }
 

@@ -14,5 +14,7 @@ public interface RepositoryUtilisateur extends JpaRepository<Utilisateur, Intege
 
 	Optional<Utilisateur> findUtilisateurByLogin(String login);
 
+	Optional<Utilisateur> findUtilisateurByLoginOrEmail(String login, String email);
+
 	Utilisateur save(Utilisateur newUtilisateur);
 }
