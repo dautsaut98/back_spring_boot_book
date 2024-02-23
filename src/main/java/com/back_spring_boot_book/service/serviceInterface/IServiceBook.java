@@ -32,4 +32,21 @@ public interface IServiceBook {
 	 * @return le livre
 	 */
 	public Optional<Book> findBookByNomAndIdUtilisateur(String nom, Integer idUtilisateur);
+
+	/**
+	 * Trouve le livre en fonction du nom
+	 * @param idLivre
+	 * @param idUtilisateur
+	 * @return le livre
+	 */
+	public Optional<Book> findBookByIdAndIdUtilisateur(Integer idLivre, Integer idUtilisateur);
+
+	/**
+	 * Ajoute un livre en BDD.
+	 * @param bookWithDataUpdate le livre à ajouter
+	 * @param idUtilisateur l'id de l'utilisateur auquel appartient
+	 * @return le livre update
+	 * @throws BookExisteDejaException
+	 */
+	public Book updateBook(Book bookWithDataUpdate, Integer idUtilisateur) throws BookExisteDejaException;
 }

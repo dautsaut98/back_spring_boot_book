@@ -16,4 +16,6 @@ public interface RepositoryBook extends JpaRepository<Book, Integer>{
 	Optional<List<Book>> findAllByUtilisateurId(Integer idUtilisateur);
 
 	Optional<Book> findByNomAndUtilisateurId(String nom, Integer idUtilisateur);
+
+	Optional<Book> findByIdAndUtilisateurId(Integer idBook, Integer idUtilisateur);
 }

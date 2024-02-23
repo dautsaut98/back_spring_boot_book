@@ -3,6 +3,8 @@ package com.back_spring_boot_book.service.serviceImplemente;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import com.back_spring_boot_book.exceptions.BookNonTrouveException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,5 +54,36 @@ public class ServiceBook implements IServiceBook {
 		else
 			logger.debug("Sortie OK de la méthode findBookByNomAndIdUtilisateur pour l id utilisateur "+idUtilisateur+" et livre : "+opLivre.get());
 		return opLivre;
+	}
+
+	@Override
+	public Optional<Book> findBookByIdAndIdUtilisateur(Integer idBook, Integer idUtilisateur) {
+		logger.debug("Entree dans la méthode findBookByIdAndIdUtilisateur avec l id utilisateur : "+idUtilisateur);
+		Optional<Book> opLivre = this.bookRepository.findByIdAndUtilisateurId(idBook, idUtilisateur);
+		if(opLivre.isEmpty())
+			logger.debug("Sortie OK de la méthode findBookByIdAndIdUtilisateur avec le livre avec comme id : " + idBook + " et id utilisateur : "+idUtilisateur+" absent");
+		else
+			logger.debug("Sortie OK de la méthode findBookByIdAndIdUtilisateur pour l id utilisateur "+idUtilisateur+" et livre : "+opLivre.get());
+		return opLivre;
+	}
+
+	@Override
+	public Book updateBook(Book bookWithDataUpdate, Integer idUtilisateur) throws BookExisteDejaException {
+		logger.debug("Entree dans la méthode updateBook avec le livre : " + bookWithDataUpdate.toString());
+		Book bookFindBdd = this.findBookByIdAndIdUtilisateur(bookWithDataUpdate.getId(), idUtilisateur)
+				.orElseThrow(() -> new BookNonTrouveException("livre non trouvé"));
+		this.findBookByNomAndIdUtilisateur(bookWithDataUpdate.getNom(), idUtilisateur)
+				.filter(book -> !book.getId().equals(bookWithDataUpdate.getId()))
+				.ifPresent((book) -> {throw new BookExisteDejaException("le livre existe dejà");});
+		bookFindBdd.setLu(bookWithDataUpdate.isLu());
+		bookFindBdd.setNom(bookWithDataUpdate.getNom());
+		bookFindBdd.setNomAuteur(bookWithDataUpdate.getNomAuteur());
+		bookFindBdd.setPrenomAuteur(bookWithDataUpdate.getPrenomAuteur());
+		bookFindBdd.setDateParution(bookWithDataUpdate.getDateParution());
+		bookFindBdd.setDescription(bookWithDataUpdate.getDescription());
+		bookFindBdd.setSrcImage(bookWithDataUpdate.getSrcImage());
+		Book bookRetour = this.bookRepository.save(bookFindBdd);
+		logger.debug("Sortie OK de la méthode updateBook avec le livre : "+ bookFindBdd);
+		return bookRetour;
 	}
 }

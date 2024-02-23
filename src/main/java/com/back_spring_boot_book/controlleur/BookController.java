@@ -1,5 +1,6 @@
 package com.back_spring_boot_book.controlleur;
 
+import com.back_spring_boot_book.exceptions.BookNonTrouveException;
 import com.back_spring_boot_book.utils.converters.ConvertRequestDTOToEntity;
 import com.back_spring_boot_book.utils.converters.ConverterEntityToResponseDTO;
 import com.back_spring_boot_book.dtos.requestDto.BookRequestDTO;
@@ -17,7 +18,6 @@ import com.back_spring_boot_book.service.serviceImplemente.ServiceBook;
 import com.back_spring_boot_book.service.serviceImplemente.ServiceUtilisateur;
 
 import javax.validation.Valid;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
@@ -83,5 +83,28 @@ public class BookController {
         }
         logger.debug("retour 200 de getBookOfUserAndName avec pour l utilisateur "+idUser+" avec le livre : "+opBook.get());
         return ResponseEntity.status(HttpStatus.OK).body(ConverterEntityToResponseDTO.convertBookToBookDTO(opBook.get()));
+    }
+
+    @PutMapping("/updateBook")
+    public ResponseEntity<BookResponseDTO> updateBook(@Valid @RequestBody BookRequestDTO bookRequestDTO) {
+        try {
+            logger.debug("Appel de updateBook avec le livre "+bookRequestDTO.toString());
+            Book bookWithDataUpdate = ConvertRequestDTOToEntity.convertBookDTOToBook(bookRequestDTO);
+            BookResponseDTO bookUpdateResponse = ConverterEntityToResponseDTO.convertBookToBookDTO(this.serviceBook.updateBook(bookWithDataUpdate, bookRequestDTO.getIdUser()));
+            logger.debug("retour 200 de updateBook avec le livre "+bookUpdateResponse);
+            return ResponseEntity.ok(bookUpdateResponse);
+        } catch (BookNonTrouveException e) {
+            logger.debug("retour 404 de updateBook, le livre "+bookRequestDTO.getId()+" est introuvable en bdd");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch(UtilisateurNonTrouveException e) {
+            logger.debug("retour 404 de updateBook, l utilisateur " + bookRequestDTO.getIdUser() + " est introuvable en bdd");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch(BookExisteDejaException e) {
+            logger.debug("retour 409 de updateBook, le livre "+bookRequestDTO.getNom()+" existe deja en bdd");
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch (ParseException e) {
+            logger.debug("retour 400 de updateBook, la date est non correct");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }
