@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.back_spring_boot_book.exceptions.BookExisteDejaException;
+import com.back_spring_boot_book.exceptions.BookNonTrouveException;
 import com.back_spring_boot_book.model.Book;
 
 /**
@@ -49,4 +50,11 @@ public interface IServiceBook {
 	 * @throws BookExisteDejaException
 	 */
 	public Book updateBook(Book bookWithDataUpdate, Integer idUtilisateur) throws BookExisteDejaException;
+
+	/**
+	 * Supprime un livre.
+	 * @param idLivre que l'on veut supprimer.
+	 * @throws BookNonTrouveException
+	 */
+	public void deleteBook(Integer idLivre) throws BookNonTrouveException;
 }

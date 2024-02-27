@@ -105,6 +105,7 @@ public class ServiceBookTest {
 
     @Test
     public void findBookByNomAndIdUtilisateur() {
+        // GIVEN
         Book bookRepositoryReturn = Book.builder()
                 .nom("livre 1")
                 .lu(false)

@@ -81,6 +81,12 @@
 			<version>0.11.2</version>
 			<scope>runtime</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.aol.cyclops</groupId>
+			<artifactId>cyclops-try</artifactId>
+			<version>7.2.4</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

@@ -1,5 +1,6 @@
 package com.back_spring_boot_book.controlleur;
 
+import com.aol.cyclops.trycatch.Try;
 import com.back_spring_boot_book.exceptions.BookNonTrouveException;
 import com.back_spring_boot_book.utils.converters.ConvertRequestDTOToEntity;
 import com.back_spring_boot_book.utils.converters.ConverterEntityToResponseDTO;
@@ -29,10 +30,8 @@ public class BookController {
 
     @Autowired
     private ServiceBook serviceBook;
-
     @Autowired
     private ServiceUtilisateur serviceUtilisateur;
-
     Logger logger = LoggerFactory.getLogger(BookController.class);
 
     @PostMapping("/addBook")
@@ -105,6 +104,19 @@ public class BookController {
         } catch (ParseException e) {
             logger.debug("retour 400 de updateBook, la date est non correct");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @DeleteMapping("/deleteBook")
+    public ResponseEntity<Void> deleteBook(@Valid @RequestParam Integer idLivre) {
+        logger.debug("Appel de deleteBook avec l'id livre : "+idLivre);
+        try {
+            this.serviceBook.deleteBook(idLivre);
+            logger.debug("retour 200 de deleteBook avec l'id livre "+idLivre);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (BookNonTrouveException e) {
+            logger.debug("retour 404 de deleteBook avec l'id livre "+idLivre+" car non trouvé en bdd.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }

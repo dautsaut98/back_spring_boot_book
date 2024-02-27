@@ -1,9 +1,13 @@
 package com.back_spring_boot_book.service.serviceImplemente;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
+import com.aol.cyclops.matcher.Predicates;
 import com.back_spring_boot_book.exceptions.BookNonTrouveException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +19,8 @@ import com.back_spring_boot_book.model.Book;
 import com.back_spring_boot_book.model.Utilisateur;
 import com.back_spring_boot_book.repository.RepositoryBook;
 import com.back_spring_boot_book.service.serviceInterface.IServiceBook;
+
+import javax.swing.*;
 
 @Service
 public class ServiceBook implements IServiceBook {
@@ -85,5 +91,13 @@ public class ServiceBook implements IServiceBook {
 		Book bookRetour = this.bookRepository.save(bookFindBdd);
 		logger.debug("Sortie OK de la méthode updateBook avec le livre : "+ bookFindBdd);
 		return bookRetour;
+	}
+
+	@Override
+	public void deleteBook(Integer idLivre) throws BookNonTrouveException {
+		this.bookRepository
+				.findById(idLivre)
+				.orElseThrow(() -> new BookNonTrouveException("livre non trouve"));
+		this.bookRepository.deleteById(idLivre);
 	}
 }
