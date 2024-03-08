@@ -1,6 +1,7 @@
 package com.back_spring_boot_book.controlleur;
 
 import com.aol.cyclops.trycatch.Try;
+import com.back_spring_boot_book.exceptions.BookNonSupprimeException;
 import com.back_spring_boot_book.exceptions.BookNonTrouveException;
 import com.back_spring_boot_book.utils.converters.ConvertRequestDTOToEntity;
 import com.back_spring_boot_book.utils.converters.ConverterEntityToResponseDTO;
@@ -117,6 +118,9 @@ public class BookController {
         } catch (BookNonTrouveException e) {
             logger.debug("retour 404 de deleteBook avec l'id livre "+idLivre+" car non trouvé en bdd.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (BookNonSupprimeException e) {
+            logger.debug("retour 409 de deleteBook avec l'id livre "+idLivre+" car non supprimé en bdd.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 }

@@ -8,6 +8,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import com.aol.cyclops.matcher.Predicates;
+import com.back_spring_boot_book.exceptions.BookNonSupprimeException;
 import com.back_spring_boot_book.exceptions.BookNonTrouveException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,5 +100,8 @@ public class ServiceBook implements IServiceBook {
 				.findById(idLivre)
 				.orElseThrow(() -> new BookNonTrouveException("livre non trouve"));
 		this.bookRepository.deleteById(idLivre);
+		this.bookRepository
+				.findById(idLivre)
+				.ifPresent((book) -> {throw new BookNonSupprimeException("book non supprimé");});
 	}
 }
